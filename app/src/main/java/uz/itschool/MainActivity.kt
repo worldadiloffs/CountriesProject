@@ -3,11 +3,7 @@ package uz.itschool
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import uz.itschool.databinding.ActivityMainBinding
-import uz.itschool.databinding.ItemUserBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -24,10 +20,13 @@ class MainActivity : AppCompatActivity() {
         binding.main.setOnItemClickListener { _, _, i, _ ->
             var user = list.get(i)
             var intent = Intent(this, MoreInfoActivity::class.java)
-            intent.putExtra("user",user)
+            intent.putExtra("user", user)
             startActivity(intent)
         }
-
+        binding.fav.setOnClickListener {
+            val intent = Intent(this, FavActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

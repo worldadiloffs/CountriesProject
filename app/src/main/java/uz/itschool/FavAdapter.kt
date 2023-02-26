@@ -15,10 +15,9 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import uz.itschool.databinding.ItemUserBinding
 
-class Adapter(context: Context, var users: MutableList<User>) :
-    ArrayAdapter<User>(context, R.layout.item_user, users) {
+class FavAdapter(context: Context, var users: MutableList<User>) :
+    ArrayAdapter<User>(context, R.layout.item_fav, users) {
 
-    private var isFav = false
     override fun getCount(): Int {
         return users.size
     }
@@ -39,29 +38,6 @@ class Adapter(context: Context, var users: MutableList<User>) :
         binding.delete.setOnClickListener {
             users.remove(user)
             notifyDataSetChanged()
-        }
-        binding.edit.setOnClickListener {
-            val dialog = Dialog(context)
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialog.setCancelable(false)
-            dialog.setContentView(R.layout.custom_dialog)
-            val name = dialog.findViewById<TextView>(R.id.name)
-            name.text = user.name
-            val population = dialog.findViewById<TextView>(R.id.population)
-            population.text = user.population
-            val change = dialog.findViewById(R.id.change) as Button
-            change.setOnClickListener {
-                user.name = name.text.toString()
-                user.population = population.text.toString()
-                notifyDataSetChanged()
-                dialog.dismiss()
-            }
-            dialog.show()
-        }
-
-        binding.fav.setOnClickListener {
-            val intent = Intent(context, FavActivity::class.java)
-            intent.putExtra("fav", user)
         }
         binding.name.text = user.name
         binding.population.text = user.population
