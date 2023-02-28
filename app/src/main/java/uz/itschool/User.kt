@@ -9,5 +9,6 @@ data class User(
     var img: String,
     var images: String,
     var images2: String,
-    var images3: String
+    var images3: String,
+    var status:Boolean = false
 ) : java.io.Serializable

@@ -3,18 +3,23 @@ package uz.itschool
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.widget.addTextChangedListener
+import okhttp3.internal.notify
+import okhttp3.internal.notifyAll
 import uz.itschool.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var list = mutableListOf<User>()
+    private var listFav = mutableListOf<User>()
+    private var isFav = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         createUser()
 
-        var adapter = Adapter(this, list)
+        var adapter = Adapter(this, list, binding)
         binding.main.adapter = adapter
 
         binding.main.setOnItemClickListener { _, _, i, _ ->
@@ -24,10 +29,35 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.fav.setOnClickListener {
-            val intent = Intent(this, FavActivity::class.java)
-            startActivity(intent)
+            if (!isFav) {
+                binding.fav.setImageResource(R.drawable.fav)
+                isFav = true
+                binding.fav.tag = 1
+                var filter = list.filter { it.status }
+                adapter = Adapter(this, filter as MutableList<User>, binding)
+                binding.main.adapter = adapter
+            } else {
+                binding.fav.setImageResource(R.drawable.fav_un)
+                isFav = false
+                binding.fav.tag = 0
+                adapter = Adapter(this, list, binding)
+                binding.main.adapter = adapter
+            }
         }
-
+        binding.search.addTextChangedListener {
+            val filter = mutableListOf<User>()
+            if (it != null) {
+                var fav = list
+                if (isFav) fav = list.filter { it.status } as MutableList<User>
+                for (c in fav) {
+                    if (c.name.lowercase().contains(it.toString().lowercase())) {
+                        filter.add(c)
+                    }
+                }
+                adapter = Adapter(this, filter,binding)
+                binding.main.adapter = adapter
+            }
+        }
     }
 
     private fun createUser() {

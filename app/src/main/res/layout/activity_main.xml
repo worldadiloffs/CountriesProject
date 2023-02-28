@@ -28,10 +28,21 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/fav"
+            android:src="@drawable/fav_un"
             android:layout_gravity="center"
             app:tint="@color/red" />
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        android:hint="Search" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

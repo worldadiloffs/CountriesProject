@@ -13,9 +13,10 @@ import android.widget.Button
 import android.widget.TextView
 import coil.load
 import coil.transform.CircleCropTransformation
+import uz.itschool.databinding.ActivityMainBinding
 import uz.itschool.databinding.ItemUserBinding
 
-class Adapter(context: Context, var users: MutableList<User>) :
+class Adapter(context: Context, var users: MutableList<User>,  var binding2: ActivityMainBinding) :
     ArrayAdapter<User>(context, R.layout.item_user, users) {
 
     private var isFav = false
@@ -59,9 +60,21 @@ class Adapter(context: Context, var users: MutableList<User>) :
             dialog.show()
         }
 
+        if (users.get(position).status) binding.fav.setImageResource(R.drawable.fav)
+        else binding.fav.setImageResource(R.drawable.fav_un)
+
         binding.fav.setOnClickListener {
-            val intent = Intent(context, FavActivity::class.java)
-            intent.putExtra("fav", user)
+            if (users.get(position).status){
+                binding.fav.setImageResource(R.drawable.fav_un)
+                users.get(position).status = false
+                if (binding2.fav.tag == 1){
+                    users.removeAt(position)
+                    notifyDataSetChanged()
+                }
+                return@setOnClickListener
+            }
+            binding.fav.setImageResource(R.drawable.fav)
+            users.get(position).status = true
         }
         binding.name.text = user.name
         binding.population.text = user.population
